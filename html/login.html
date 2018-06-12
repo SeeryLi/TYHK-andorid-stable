@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<title>登录</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/aui/aui.css" />
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+	<link rel="stylesheet" type="text/css" href="../css/login.css" />
+	<script type="text/javascript" src="../script/jquery-2.1.1.js"></script>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/aui/aui-dialog.js"></script>
+	<script type="text/javascript" src="../script/aui/aui-toast.js"></script>
+	<script type="text/javascript" src="../script/commit/utils.js"></script>
+	<script type="text/javascript" src="../script/commit/encryption.js"></script>
+	<script type="text/javascript" src="../script/commit/servicePath.js"></script>
+	<script type="text/javascript" src="../script/commit/userContent.js"></script>
+</head>
+
+<body>
+	<header id="header" class="aui-bar aui-bar-nav title-a">
+		<div></div>
+		<div class="aui-pull-left aui-btn" onclick="cancle()">
+			<span class="aui-iconfont"></span>取消
+		</div>
+		<div id="info_name" class="aui-title">
+			快捷登录
+		</div>
+		<div id="passwordLogin" class="aui-pull-right aui-btn" onclick="passwordLogin()">
+			<span class="aui-iconfont"></span>密码登录
+		</div>
+		<div id="rapidLogin" class="aui-pull-right aui-btn dis" onclick="rapidLogin()">
+			<span class="aui-iconfont"></span>快捷登录
+		</div>
+	</header>
+</body>
+<script type="text/javascript">
+	apiready = function() {
+		var header = document.querySelector('#header');
+		$api.fixStatusBar(header);
+		var header = $api.byId('header');
+		var headerH = $api.offset(header).h;
+		api.openFrame({
+			name: 'login-content',
+			url: 'login_content_frame/login_content.html',
+			rect: {
+				x: 0,
+				y: headerH,
+				w: 'auto',
+				h: 'auto'
+			},
+			pageParam: {
+				name: 'test'
+			},
+			bounces: false,
+			bgColor: 'rgba(0,0,0,0)',
+			vScrollBarEnabled: false,
+			hScrollBarEnabled: false
+		});
+		closeLogin();
+	}
+
+	function closeLogin(){
+			api.execScript({
+				name: 'doctor_user_info',
+				script: 'close();'
+			});
+			api.execScript({
+				name: 'user_info',
+				script: 'close();'
+			});
+	}
+
+	function cancle(){
+		console.log(api.pageParam.fromPwdChange);
+		if(api.pageParam.fromPwdChange){
+			api.closeToWin({
+			    name: 'root'
+			});
+		}else {
+			goBack()
+		}
+	}
+	// 密码登录
+function passwordLogin() {
+	$('#info_name').text("密码登录");
+	$("#passwordLogin").addClass("dis");
+	$("#rapidLogin").removeClass("dis");
+	api.execScript({
+			frameName: 'login-content',
+			script: 'pwdLogin();'
+	});
+
+}
+
+// 快捷登录
+function rapidLogin(){
+	$('#info_name').text("快捷登录");
+	$("#rapidLogin").addClass("dis");
+	$("#passwordLogin").removeClass("dis");
+	api.execScript({
+			frameName: 'login-content',
+			script: 'rpdLogin();'
+	});
+
+}
+</script>
+
+</html>
